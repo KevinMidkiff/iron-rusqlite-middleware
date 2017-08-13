@@ -13,6 +13,9 @@ use std::path::{Path};
 /// Pool of `SqliteConnectionManager` kept by the Iron middleware
 pub type RusqlitePool = Arc<r2d2::Pool<r2d2_sqlite::SqliteConnectionManager>>;
 
+/// Pooled conenction to the SQLite database
+pub type SqliteConnection = r2d2::PooledConnection<r2d2_sqlite::SqliteConnectionManager>;
+
 /// Iron rusqlite middleware
 pub struct RusqliteMiddleware {
     /// Pool of connections to SQLite through the rusqlite library
@@ -53,7 +56,7 @@ impl RusqliteMiddleware {
     /// Get a handle to a pooled connection for the SQLite database. This can be used to execute
     /// some SQL commands prior to launching your Iron webserver. An example would be creating
     /// tables if they do not currently exist in the database.
-    pub fn get_connection(&self) -> r2d2::PooledConnection<r2d2_sqlite::SqliteConnectionManager> {
+    pub fn get_connection(&self) -> SqliteConnection {
         let poll = self.pool.clone();
         poll.get().unwrap()
     }
@@ -94,7 +97,7 @@ pub trait RusqliteRequestExtension {
 
 /// Implementation of the `RusqliteRequestExention` for the `iron::Request`.
 impl<'a, 'b> RusqliteRequestExtension for Request<'a, 'b> {
-    fn database_connection(&self) -> r2d2::PooledConnection<r2d2_sqlite::SqliteConnectionManager> {
+    fn database_connection(&self) -> SqliteConnection {
         let pv = self.extensions.get::<RusqliteMiddleware>().unwrap();  // Is this safe?
         let &Value(ref poll) = pv;
         poll.get().unwrap()
