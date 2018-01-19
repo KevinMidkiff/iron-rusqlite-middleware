@@ -1,6 +1,8 @@
 [package]
-description = "Iron middleware for the rusqlite SQLite library."
 name = "iron_rusqlite_middleware"
+description = "Iron middleware for the rusqlite SQLite library."
+repository = "https://github.com/KevinMidkiff/iron-rusqlite-middleware"
+readme = "README.md"
 version = "0.1.1"
 authors = ["Kevin Midkiff <midkiff.km@gmail.com>"]
 license = "MIT"
