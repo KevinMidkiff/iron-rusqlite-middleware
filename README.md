@@ -1,5 +1,5 @@
 # Iron Rusqlite Middleware
-[![Build Status](https://travis-ci.org/KevinMidkiff/iron-rusqlite-middleware.svg?branch=master)](https://travis-ci.org/KevinMidkiff/iron-rusqlite-middleware)
+[![Build Status](https://travis-ci.org/KevinMidkiff/iron-rusqlite-middleware.svg?branch=master)](https://travis-ci.org/KevinMidkiff/iron-rusqlite-middleware) <img src="https://img.shields.io/crates/v/iron_rusqlite_middleware.svg" alt="iron_rusqlite_middleware’s current version badge" title="iron_rusqlite_middleware’s current version badge">
 
 Middleware for the Iron framework for rust enabling database connections using rusqlite.
 This library is inspired by the [Iron Diesel Middleware](https://github.com/darayus/iron-diesel-middleware).
