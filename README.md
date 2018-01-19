@@ -8,8 +8,8 @@ This library is inspired by the [Iron Diesel Middleware](https://github.com/dara
 To add this library to your cargo project add the following to your `Cargo.toml`.
 
 ```toml
-[dependencies.iron_rusqlite_middleware]
-git = "https://github.com/KevinMidkiff/iron-rusqlite-middleware"
+[dependencies]
+iron_rusqlite_middleware = "0.1.1"
 ```
 
 ## Usage
