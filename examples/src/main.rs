@@ -29,13 +29,13 @@ fn list_todos(req: &mut Request) -> IronResult<Response> {
     // Get all of the users
     let mut stmt = match conn.prepare(SELECT_TODOS) {
         Ok(s) => s,
-        Err(_) => return Ok(Response::with((status::InternalServerError))),
+        Err(_) => return Ok(Response::with(status::InternalServerError)),
     };
 
     // Map the query results to strings
     let query = match stmt.query_map(NO_PARAMS, |row| { ToDo { id: row.get(0), task: row.get(1) } }) {
         Ok(q) => q,
-        Err(_) => return Ok(Response::with((status::InternalServerError))),
+        Err(_) => return Ok(Response::with(status::InternalServerError)),
     };
 
     // Process the query results
@@ -43,7 +43,7 @@ fn list_todos(req: &mut Request) -> IronResult<Response> {
     for todo in query {
         match todo {
             Ok(t) => todos.push_str(&format!("{}: {}\n", t.id, t.task)),
-            Err(_) => return Ok(Response::with((status::InternalServerError))),
+            Err(_) => return Ok(Response::with(status::InternalServerError)),
         }
     }
 
