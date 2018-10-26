@@ -6,3 +6,4 @@ authors = ["Kevin Midkiff <midkiff.km@gmail.com>"]
 [dependencies]
 iron = "0.5.1"
 iron_rusqlite_middleware = { path = "..", version = "*" }
+rusqlite = "0.15.0"

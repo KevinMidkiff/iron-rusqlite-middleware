@@ -1,9 +1,11 @@
 extern crate iron;
 extern crate iron_rusqlite_middleware;
+extern crate rusqlite;
 
 use iron::prelude::*;
 use iron::status;
 use iron_rusqlite_middleware::{RusqliteMiddleware, RusqliteRequestExtension};
+use rusqlite::NO_PARAMS;
 
 static CREATE_TODOS_TBL: &'static str = "
 CREATE TABLE IF NOT EXISTS todos(
@@ -27,13 +29,13 @@ fn list_todos(req: &mut Request) -> IronResult<Response> {
     // Get all of the users
     let mut stmt = match conn.prepare(SELECT_TODOS) {
         Ok(s) => s,
-        Err(_) => return Ok(Response::with((status::InternalServerError))),
+        Err(_) => return Ok(Response::with(status::InternalServerError)),
     };
 
     // Map the query results to strings
-    let query = match stmt.query_map(&[], |row| { ToDo { id: row.get(0), task: row.get(1) } }) {
+    let query = match stmt.query_map(NO_PARAMS, |row| { ToDo { id: row.get(0), task: row.get(1) } }) {
         Ok(q) => q,
-        Err(_) => return Ok(Response::with((status::InternalServerError))),
+        Err(_) => return Ok(Response::with(status::InternalServerError)),
     };
 
     // Process the query results
@@ -41,7 +43,7 @@ fn list_todos(req: &mut Request) -> IronResult<Response> {
     for todo in query {
         match todo {
             Ok(t) => todos.push_str(&format!("{}: {}\n", t.id, t.task)),
-            Err(_) => return Ok(Response::with((status::InternalServerError))),
+            Err(_) => return Ok(Response::with(status::InternalServerError)),
         }
     }
 
@@ -51,7 +53,7 @@ fn list_todos(req: &mut Request) -> IronResult<Response> {
 pub fn main() {
     let rusqlite_middleware = RusqliteMiddleware::new("example.db").unwrap();
     let conn = rusqlite_middleware.get_connection();
-    conn.execute(CREATE_TODOS_TBL, &[]).unwrap();
+    conn.execute(CREATE_TODOS_TBL, NO_PARAMS).unwrap();
 
     let mut chain = Chain::new(list_todos);
     chain.link_before(rusqlite_middleware);

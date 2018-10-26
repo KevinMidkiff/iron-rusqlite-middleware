@@ -33,9 +33,8 @@ impl RusqliteMiddleware {
     ///
     /// See `rusqlite::Connection::open` for mode details.
     pub fn new<P: AsRef<Path>>(path: P) -> Result<RusqliteMiddleware, Box<Error>> {
-        let config = r2d2::Config::default();
-        let manager = r2d2_sqlite::SqliteConnectionManager::new(path);
-        let pool = r2d2::Pool::new(config, manager)?;
+        let manager = r2d2_sqlite::SqliteConnectionManager::file(path);
+        let pool = r2d2::Pool::builder().build(manager)?;
 
         Ok(RusqliteMiddleware{ pool: Arc::new(pool) })
     }
@@ -46,9 +45,8 @@ impl RusqliteMiddleware {
     ///
     /// See `rusqlite::Connection::open_with_flags` for mode details.
     pub fn new_with_flags<P: AsRef<Path>>(path: P, flags: rusqlite::OpenFlags) -> Result<RusqliteMiddleware, Box<Error>> {
-        let config = r2d2::Config::default();
-        let manager = r2d2_sqlite::SqliteConnectionManager::new_with_flags(path, flags);
-        let pool = r2d2::Pool::new(config, manager)?;
+        let manager = r2d2_sqlite::SqliteConnectionManager::file(path).with_flags(flags);
+        let pool = r2d2::Pool::builder().build(manager)?;
 
         Ok(RusqliteMiddleware{ pool: Arc::new(pool) })
     }
